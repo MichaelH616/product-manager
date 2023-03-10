@@ -1,14 +1,15 @@
 import './App.css';
-import { useState } from 'react';
-import ProductForm from './components/ProductForm';
 import { Routes, Route } from 'react-router-dom';
+import Main from './views/Main';
+import ProductDetail from './components/ProductDetail';
 
 function App() {
-  const [allProducts, setAllProducts] = useState([])
+  
   return (
     <div>
         <Routes>
-          <Route path='/' element={<ProductForm allProducts={allProducts} setAllProducts={setAllProducts}/>} />
+          <Route path='/' default element={<Main/>} />
+          <Route path='/products/:id' element={<ProductDetail/>}/>
         </Routes>
     </div>
   );
