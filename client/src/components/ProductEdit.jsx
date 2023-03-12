@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const ProductForm = (props) => {
+const ProductEdit = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
-    const { allProducts, setAllProducts } = props;
 
-    const [product, setProduct] = useState({
-        title: '',
-        price: 0,
-        description: ''
-    })
+    const [product, setProduct] = useState({})
+
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/products/${id}`)
+            .then(res => {
+                setProduct(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, [id]);
 
     const changeHandler = (e) => {
         setProduct({ ...product, [e.target.name]: e.target.value })
@@ -18,20 +24,16 @@ const ProductForm = (props) => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/api/products', product)
+        axios.put(`http://localhost:8000/api/products/${id}`, product)
             .then((res) => {
-                setAllProducts([...allProducts], res.data);
-                setProduct({
-                    title: "",
-                    price: 0,
-                    description: ""
-                });
+                console.log(res);
                 navigate('/');
             })
             .catch(err => {
                 console.log(err);
             })
     }
+
     return (
         <div>
             <div className="container text-center">
@@ -48,7 +50,7 @@ const ProductForm = (props) => {
                             <label htmlFor="" className="form-label">Description:</label>
                             <input type="text" name="description" className="form-control" onChange={changeHandler} value={product.description}></input>
                             <br></br>
-                            <button className='btn btn-success'>Create</button>
+                            <button className='btn btn-success'>Update</button>
                         </div>
                     </form>
                 </div>
@@ -57,4 +59,4 @@ const ProductForm = (props) => {
     )
 }
 
-export default ProductForm
+export default ProductEdit

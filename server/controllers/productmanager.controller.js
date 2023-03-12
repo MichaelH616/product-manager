@@ -7,7 +7,7 @@ module.exports = {
                 res.json(allProducts)
             })
             .catch((err) => {
-                res.status(500).json({message: 'Something went wrong', error:err})
+                res.status(500).json(err)
             })
     },
 
@@ -17,7 +17,7 @@ module.exports = {
                 res.json(oneProduct)
             })
             .catch((err) => {
-                res.status(500).json({message: 'Something went wrong', error:err})
+                res.status(500).json(err)
             })
     },
 
@@ -27,7 +27,27 @@ module.exports = {
                 res.json(newProduct)
             })
             .catch((err) => {
-                res.status(500).json({message: 'Something went wrong', error:err})
+                res.status(500).json(err)
             })
     },
+
+    updateProduct: (req, res) => {
+        Product.findByIdAndUpdate(req.params.id, req.body, {new:true})
+            .then(updatedProduct => {
+                res.json(updatedProduct)
+            })
+            .catch((err) => {
+                res.status(500).json(err)
+            })
+    },
+
+    deleteProduct: (req, res) => {
+        Product.findByIdAndDelete(req.params.id)
+            .then(result => {
+                res.json(result)
+            })
+            .catch((err) => {
+                res.status(500).json(err)
+            })
+    }
 }
